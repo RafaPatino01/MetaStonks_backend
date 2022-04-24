@@ -1,0 +1,16 @@
+{
+  "name": "metastonks_backend",
+  "version": "1.0.0",
+  "description": "A Universidad Panamericana project for Advanced Database Course",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rafael Patino and Marco Nunez",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "express": "^4.17.3",
+    "request-promise": "^4.2.6"
+  }
+}
