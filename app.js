@@ -1,4 +1,5 @@
 // Required packages
+const path = require('path');
 const express = require('express')
 const cheerio = require('cheerio')
 const request = require('request-promise')
@@ -8,17 +9,24 @@ const port = 3000
 
 // Express Routing
 
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
+
+// Send HTML
 app.get('/', (req, res) => {
-    res.send("<h1>HelloWorld</h1>")
+    res.sendFile(path.join(__dirname + '/src/index.html'));
+})
+
+// Send CSS
+app.get('/main-css', (req, res) => {
+    res.sendFile(path.join(__dirname + '/src/css/main.css'));
 })
 
 app.get('/token_names', (req, res) => {
     res.send(token_names)
 })
 
-app.listen(port, () => {
-console.log(`Example app listening on port ${port}`)
-})
 
 // Scrapping Stuff
 let $ = cheerio.load("loading...")
