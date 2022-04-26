@@ -9,7 +9,7 @@ const port = 3000
 // Express Routing
 
 app.get('/', (req, res) => {
-    res.send($.html())
+    res.send("<h1>HelloWorld</h1>")
 })
 
 app.get('/token_names', (req, res) => {
