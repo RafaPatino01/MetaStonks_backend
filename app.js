@@ -12,6 +12,10 @@ app.get('/', (req, res) => {
     res.send($.html())
 })
 
+app.get('/token_names', (req, res) => {
+    res.send(token_names)
+})
+
 app.listen(port, () => {
 console.log(`Example app listening on port ${port}`)
 })
@@ -40,4 +44,6 @@ async function init() {
 
 init()
 
-
+// Working w database
+let msg = require('./db.js')
+console.log(msg.SimpleMessage);
