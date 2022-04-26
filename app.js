@@ -4,31 +4,25 @@ const express = require('express')
 const cheerio = require('cheerio')
 const request = require('request-promise')
 
+// Express 
 const app = express()
 const port = 3000
 
-// Express Routing
-
+// Routing ---------------------------------------------------
+// End Points
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
-})
-
-// Send HTML
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname + '/src/index.html'));
-})
-
-// Send CSS
-app.get('/main-css', (req, res) => {
-    res.sendFile(path.join(__dirname + '/src/css/main.css'));
 })
 
 app.get('/token_names', (req, res) => {
     res.send(token_names)
 })
 
+// Working w database ------------------------------------------------
+let msg = require('./db.js')
+console.log(msg.SimpleMessage);
 
-// Scrapping Stuff
+// Scrapping Stuff ---------------------------------------------------
 let $ = cheerio.load("loading...")
 let token_names = []
 let crypto_names = []
@@ -47,11 +41,6 @@ async function init() {
     })
     console.log(token_names)
     console.log(crypto_names)
-
 }
 
 init()
-
-// Working w database
-let msg = require('./db.js')
-console.log(msg.SimpleMessage);
