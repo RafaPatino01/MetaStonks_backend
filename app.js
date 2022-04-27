@@ -28,8 +28,42 @@ app.get('/get_users', (req, res) => {
     connection.query('SELECT * FROM users', function (error, results, fields) {
     if (error) throw error;
     res.send(results) //enviar resulados
-    });
+    })
 })
+
+//REGISTRO
+app.get('/register/:mail/:username/:pass', (req, res) => {
+    req.params
+
+    let query = `
+    INSERT INTO development.users (username, password, email)
+    VALUES ("${req.params["username"]}", "${req.params["pass"]}", "${req.params["mail"]}");`;
+
+    connection.query(query, function (error, results, fields) {
+    if (error) throw error;
+    })
+})
+//LOGIN
+app.get('/login/:username/:pass', (req, res) => {
+    req.params
+
+    let query = `
+    SELECT * FROM development.users WHERE username='${req.params["username"]}'`;
+
+    connection.query(query, function (error, results, fields) {
+        if (error) {
+            console.log(error)   
+        }
+
+        if(results[0]["password"] == req.params["pass"]){
+            res.send(["OK"])
+        }
+        else {
+            res.send(["Wrong password"])
+        }
+    })
+})
+
 
 // Scrapping Stuff ---------------------------------------------------
 let $ = cheerio.load("loading...")
