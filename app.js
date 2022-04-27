@@ -25,14 +25,10 @@ app.get('/token_names', (req, res) => {
 })
 
 app.get('/get_users', (req, res) => {
-    connection.connect();
-
     connection.query('SELECT * FROM users', function (error, results, fields) {
     if (error) throw error;
     res.send(results) //enviar resulados
     });
-
-    connection.end();    
 })
 
 // Scrapping Stuff ---------------------------------------------------
