@@ -3,24 +3,37 @@ const path = require('path');
 const express = require('express')
 const cheerio = require('cheerio')
 const request = require('request-promise')
+const cors = require('cors')
 
 // Express 
 const app = express()
 const port = 3000
+app.use(cors())
+
+// Working w database ------------------------------------------------
+let db = require('./db.js')
+let connection = db.my_connection
 
 // Routing ---------------------------------------------------
 // End Points
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Meta Stonks app listening on port ${port}`)
 })
 
 app.get('/token_names', (req, res) => {
     res.send(token_names)
 })
 
-// Working w database ------------------------------------------------
-let msg = require('./db.js')
-console.log(msg.SimpleMessage);
+app.get('/get_users', (req, res) => {
+    connection.connect();
+
+    connection.query('SELECT * FROM users', function (error, results, fields) {
+    if (error) throw error;
+    res.send(results) //enviar resulados
+    });
+
+    connection.end();    
+})
 
 // Scrapping Stuff ---------------------------------------------------
 let $ = cheerio.load("loading...")
@@ -39,8 +52,6 @@ async function init() {
     const names = $('.tw-hidden.font-bold.tw-items-center.tw-justify-between').each((i, element)=>{
         crypto_names.push($(element).text().trim())
     })
-    console.log(token_names)
-    console.log(crypto_names)
 }
 
 init()
