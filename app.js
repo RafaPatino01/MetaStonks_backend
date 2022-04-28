@@ -696,3 +696,125 @@ app.get('/update_crypto', (req, res) => {
     })
 
 })
+
+// Sentiment Analysis
+const natural = require('natural')
+const aposToLexForm = require('apos-to-lex-form')
+const SpellCorrector = require('spelling-corrector')
+const spellCorrector = new SpellCorrector()
+spellCorrector.loadDictionary()
+const SW = require('stopword')
+
+function getSentiment(pString){
+    let string = aposToLexForm(pString).toLowerCase().replace(/[^a-zA-Z\s]+/g, '')
+    
+    const { WordTokenizer } = natural
+    const tokenizer = new WordTokenizer()
+    const tokenizedReview = tokenizer.tokenize(string)
+
+    tokenizedReview.forEach((word, index) => {
+        tokenizedReview[index] = spellCorrector.correct(word)
+    })
+
+    const filteredReview = SW.removeStopwords(tokenizedReview)
+
+    const { SentimentAnalyzer, PorterStemmer } = natural
+    const analyzer = new SentimentAnalyzer('English', PorterStemmer, 'afinn')
+    const analysis = analyzer.getSentiment(filteredReview)
+
+    return analysis
+}
+
+app.get('/sentiment/:pString', (req, res) => {
+    res.send(getSentiment(req.params["pString"]))
+})
+
+//Token scores
+function calculateAverage(array) {
+    var total = 0;
+    var count = 0;
+
+    array.forEach(function(item, index) {
+        total += item;
+        count++;
+    });
+
+    return total / count;
+}
+app.get('/calcular_metascore', (req, res) => {
+
+    //Clear token data table
+    let query = `DELETE FROM development.token_data`;
+    connection.query(query, function (error, results, fields) {
+    if (error) throw error;
+    console.log("token_data cleared!")
+    })
+
+    //FILL TABLE AGAIN
+    for(let i = 0; i<100; i++){
+        
+        // Tokens with comonn ocurrences in post text are not necesarily talking about the token
+        let notbanned = token_names[i] != "MKR" && token_names[i] != "HT" && token_names[i] != "AR" && token_names[i] != "ONE" && token_names[i] != "BIT"
+        
+        if(notbanned)
+        {
+            let query = `select * from crypto_data WHERE title LIKE '%${token_names[i]}%' OR title LIKE '%${crypto_names[i]}%'`;
+    
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                
+                if(results.length > 0){
+                    let name = token_names[i]
+                    let ocurrences = results.length
+                    let upvote_ratio = [] //mean
+                    let score = [] // mean
+                    let sentiment = [] // sum
+                    let award = [] // mean
+
+                    results.forEach(post => {
+                        upvote_ratio.push(post["upvote_ratio"])
+                        score.push(post["score"])
+                        sentiment.push(getSentiment(post["title"]))
+                        award.push(post["award"])
+                    });
+
+                    let ratio_avr = calculateAverage(upvote_ratio)
+                    let score_avr = calculateAverage(score)
+                    let sentiment_avr = calculateAverage(sentiment)
+                    let award_avr = calculateAverage(award)
+
+                    // 30 ocurrences threshold
+                    // 1000 score threshold
+
+                    // ocurrencias 50%
+                    // upvotes_ratio 15%
+                    // score 10%
+                    // sentiment 15%
+                    // award 10%
+
+                    if(ocurrences>30){
+                        ocurrences = 30
+                    }
+                    if(score_avr>1000){
+                        score_avr = 1000
+                    }
+
+                    let metascore = (ocurrences/30)*60 + ratio_avr*10 + (score_avr/1000)*10 + sentiment_avr*10 + award_avr*10
+                    console.log(name + ": metascore = [" + metascore + "]")
+                
+                    let query = `
+                    INSERT INTO development.token_data (token, upvote_ratio, score, title_sentiment, text_sentiment, award, metascore, ocurrences)
+                    VALUES ("${name}", ${ratio_avr}, ${score_avr}, ${sentiment_avr}, 0, ${award_avr}, ${metascore}, ${ocurrences});`;
+                
+                    connection.query(query, function (error, results, fields) {
+                    if (error) throw error;
+                    console.log("Inserted "+ name +" data!")
+                    })
+                }
+            })
+        }
+        
+    }
+
+    res.send("<html>Updated metascore!</html>")
+})

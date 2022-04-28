@@ -9,13 +9,17 @@
   "author": "Rafael Patino and Marco Nunez",
   "license": "ISC",
   "dependencies": {
+    "apos-to-lex-form": "^1.0.5",
     "cheerio": "^1.0.0-rc.10",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
+    "natural": "^5.2.1",
     "request-promise": "^4.2.6",
-    "snoowrap": "^1.23.0"
+    "snoowrap": "^1.23.0",
+    "spelling-corrector": "^3.0.0",
+    "stopword": "^2.0.2"
   }
 }
