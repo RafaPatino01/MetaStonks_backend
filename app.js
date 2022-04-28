@@ -42,8 +42,7 @@ app.get('/register/:mail/:username/:pass', (req, res) => {
 
     connection.query(query, function (error, results, fields) {
     if (error) throw error;
-    // Iniciar sesión
-    req.session.user = req.params["username"];
+    console.log("User was registered...")
     })
 
 })
@@ -111,3 +110,589 @@ async function init() {
 }
 
 init()
+
+//REDDIT API------------------------------------------------
+let reddit = require('./reddit.js')
+let r = reddit.my_reddit
+
+app.get('/update_crypto', (req, res) => {
+
+    connection.query("DELETE FROM development.crypto_data", function (error, results, fields) {
+    if (error) throw error;
+    })
+
+    // ------ hot
+    r.getSubreddit('CryptoCurrency').getHot().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('Crypto_com').getHot().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('cryptocurrencymemes').getHot().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('SatoshiStreetBets').getHot().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('CryptoMarkets').getHot().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+
+    // ------ rising
+
+    r.getSubreddit('CryptoCurrency').getRising().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('Crypto_com').getRising().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('cryptocurrencymemes').getRising().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('SatoshiStreetBets').getRising().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('CryptoMarkets').getRising().then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    
+
+    // -------- TOP
+
+
+    r.getSubreddit('CryptoCurrency').getTop({time: 'all'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('Crypto_com').getTop({time: 'all'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('cryptocurrencymemes').getTop({time: 'all'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('SatoshiStreetBets').getTop({time: 'all'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('CryptoMarkets').getTop({time: 'all'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+
+    // --------- Controversial
+
+
+    r.getSubreddit('CryptoCurrency').getControversial({time: 'week'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('Crypto_com').getControversial({time: 'week'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('cryptocurrencymemes').getControversial({time: 'week'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('SatoshiStreetBets').getControversial({time: 'week'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+    r.getSubreddit('CryptoMarkets').getControversial({time: 'week'}).then(subreddit => {
+        for(let i=0; i<subreddit.length; i++)
+        {
+            
+            let award = 0
+    
+            if(subreddit[i]["all_awardings"].length > 0){
+                award = 1
+            }
+    
+            let title = subreddit[i]["title"].replace(/[^a-zA-Z ]/g, "")
+            let upvote_ratio = subreddit[i]["upvote_ratio"]
+            let score = subreddit[i]["score"]
+            let text = ""
+            if(subreddit[i]["selftext_html"] != null){
+                text = subreddit[i]["selftext_html"].replace(/[^a-zA-Z ]/g, "")
+            }
+            
+            let query = `
+            INSERT INTO development.crypto_data (title, upvote_ratio, score, text, award)
+            VALUES ('${title}', ${upvote_ratio}, ${score}, '${text}', ${award});`;
+
+            connection.query(query, function (error, results, fields) {
+            if (error) throw error;
+                console.log("inserted" + i)
+            })
+        }
+    })
+
+})
