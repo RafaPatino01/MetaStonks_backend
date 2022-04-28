@@ -77,6 +77,19 @@ app.get('/is_logged/:user', (req, res) => {
         res.send(["NOT LOGGED"])
     }
 })
+// log out
+app.get('/log_out/:user', (req, res) => {
+    if(logged_users.includes(req.params["user"])){
+        const index = logged_users.indexOf(req.params["user"]);
+        if (index > -1) {
+            logged_users.splice(index, 1);
+        }
+        res.send(["OK"])
+    }
+    else {
+        res.send(["Error"])
+    }
+})
 
 // Scrapping Stuff ---------------------------------------------------
 let $ = cheerio.load("loading...")
