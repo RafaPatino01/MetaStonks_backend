@@ -725,10 +725,6 @@ function getSentiment(pString){
     return analysis
 }
 
-app.get('/sentiment/:pString', (req, res) => {
-    res.send(getSentiment(req.params["pString"]))
-})
-
 //Token scores
 function calculateAverage(array) {
     var total = 0;
@@ -741,6 +737,16 @@ function calculateAverage(array) {
 
     return total / count;
 }
+
+app.get('/crypto_data', (req, res) => {
+    let query = `SELECT * FROM development.token_data ORDER BY metascore DESC`;
+    connection.query(query, function (error, results, fields) {
+    if (error) throw error;
+    console.log("token_data selected!")
+    res.send(results)
+    })
+})
+
 app.get('/calcular_metascore', (req, res) => {
 
     //Clear token data table
@@ -782,6 +788,7 @@ app.get('/calcular_metascore', (req, res) => {
                     let score_avr = calculateAverage(score)
                     let sentiment_avr = calculateAverage(sentiment)
                     let award_avr = calculateAverage(award)
+                    let real_ocurrences = ocurrences
 
                     // 30 ocurrences threshold
                     // 1000 score threshold
@@ -804,7 +811,7 @@ app.get('/calcular_metascore', (req, res) => {
                 
                     let query = `
                     INSERT INTO development.token_data (token, upvote_ratio, score, title_sentiment, text_sentiment, award, metascore, ocurrences)
-                    VALUES ("${name}", ${ratio_avr}, ${score_avr}, ${sentiment_avr}, 0, ${award_avr}, ${metascore}, ${ocurrences});`;
+                    VALUES ("${name}", ${ratio_avr}, ${score_avr}, ${sentiment_avr}, 0, ${award_avr}, ${metascore}, ${real_ocurrences});`;
                 
                     connection.query(query, function (error, results, fields) {
                     if (error) throw error;
@@ -816,5 +823,6 @@ app.get('/calcular_metascore', (req, res) => {
         
     }
 
-    res.send("<html>Updated metascore!</html>")
+    res.send(["Updating metascore..."])
 })
+
