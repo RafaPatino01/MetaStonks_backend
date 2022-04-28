@@ -31,6 +31,7 @@ app.get('/get_users', (req, res) => {
     })
 })
 
+let logged_users = []
 //REGISTRO
 app.get('/register/:mail/:username/:pass', (req, res) => {
     req.params
@@ -41,7 +42,10 @@ app.get('/register/:mail/:username/:pass', (req, res) => {
 
     connection.query(query, function (error, results, fields) {
     if (error) throw error;
+    // Iniciar sesión
+    req.session.user = req.params["username"];
     })
+
 })
 //LOGIN
 app.get('/login/:username/:pass', (req, res) => {
@@ -57,13 +61,22 @@ app.get('/login/:username/:pass', (req, res) => {
 
         if(results[0]["password"] == req.params["pass"]){
             res.send(["OK"])
+            logged_users.push(req.params["username"])
         }
         else {
             res.send(["Wrong password"])
         }
     })
 })
-
+// is logged ?
+app.get('/is_logged/:user', (req, res) => {
+    if(logged_users.includes(req.params["user"])){
+        res.send(["OK"])
+    }
+    else {
+        res.send(["NOT LOGGED"])
+    }
+})
 
 // Scrapping Stuff ---------------------------------------------------
 let $ = cheerio.load("loading...")
