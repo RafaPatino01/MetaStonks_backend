@@ -826,3 +826,43 @@ app.get('/calcular_metascore', (req, res) => {
     res.send(["Updating metascore..."])
 })
 
+//NFT Rarity algorithm
+app.get('/rarity/:address', (req, res) => {
+    let nftid = 0;
+    let general_count = 0;
+    let traits = [];
+    let count_traits = [];
+    let rarity = 0;
+    let nft_collection = [];
+    let url = ""
+    const query_nftid = `
+    SELECT id FROM nfts WHERE token_address='${req.params["address"]}'`;
+    connection.query(query_nftid,function(error,results,fields){
+        if(error) throw error;
+        nftid = results[0]["id"];
+        console.log(nftid)
+        connection.query("SELECT count(a) FROM traits",function(error,results,fields){
+            if (error) throw error;
+            general_count=results[0]["count(a)"];
+            console.log(general_count);
+            connection.query(`SELECT a FROM traits WHERE traits.id = "${nftid}"`,function(error,results,fields){
+                if (error) throw error;
+                traits.push(results[0]["a"]);
+                console.log("traits: " + traits);
+                connection.query(`SELECT a, count(a) as count_a from traits WHERE traits.a = "${traits[0]}"  group by a`,function(error,results,fields){
+                    count_traits.push(results[0]["count_a"]);
+                    console.log(count_traits);
+                    rarity = count_traits[0] / general_count;
+                    console.log(rarity);
+                    connection.query(`SELECT img_url FROM nfts WHERE nfts.id = "${nftid}"`, function(error,results,fields){
+                        if (error) throw error;
+                        url = results[0]["img_url"]
+                        res.status(200).send([rarity, url]);
+                    });
+                    
+                });
+            });
+        });
+    });
+    
+})
