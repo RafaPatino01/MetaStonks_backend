@@ -900,7 +900,7 @@ app.get('/rarityIOS/:address', (req, res) => {
                     connection.query(`SELECT img_url FROM nfts WHERE nfts.id = "${nftid}"`, function(error,results,fields){
                         if (error) throw error;
                         url = results[0]["img_url"]
-                        res.status(200).send({"id":0,"rarity":rarity, "url":url});
+                        res.status(200).send([{"id":0,"rarity":rarity, "url":url}]);
                     });
                     
                 });
