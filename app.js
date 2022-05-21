@@ -43,8 +43,10 @@ app.get('/register/:mail/:username/:pass', (req, res) => {
     connection.query(query, function (error, results, fields) {
     if (error) throw error;
     console.log("User was registered...")
+    res.send(["Error"])
     })
-
+    
+    res.send(["OK"])
 })
 //LOGIN
 app.get('/login/:username/:pass', (req, res) => {
